@@ -12,7 +12,7 @@ function App(){
   const [weatherData, setWeatherData] = useState([]);
   const [index, setIndex] = useState();
   const [markerStatus, setMarkerStatus] = useState();
-  console.log('index', index);
+
   return(
     <SafeAreaView style={{flex: 1,}}>
       <NavigationContainer>

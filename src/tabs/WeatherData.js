@@ -27,12 +27,17 @@ function WeatherData(props) {
   const verticalContentInset = { top: 10, bottom: 10 }
   const xAxisHeight = 30
   
+  const convertLat = (num) =>{
+    let stringNum = num.toString();
+    let conversion = `${stringNum.slice(0,2)}${stringNum.slice(3)}`
+    return conversion;
+  }
   const handleDeleteLocation = (index) => {
-    const array = weatherData.filter((data, i) => i !== index);
+    const array = weatherData.filter((data, i) => convertLat(data.lat) !== index);
     setWeatherData(array);
     props.setDeleteMarker(index);
   }
-  
+
   return (
     <>
       <ScrollView style={{flex: 1}}>
@@ -44,7 +49,7 @@ function WeatherData(props) {
           const mapData = location.daily.map(item => item.temp.day);
           const xAxisData = location.daily.map(item => item.dt);
           const handleToggle = (isExp, index) => {
-            if(index === i){
+            if(index === key){
               setIsExpnaded(isExp);
               props.changeMakerColor(isExp, index);
             } 
@@ -54,16 +59,18 @@ function WeatherData(props) {
             setSelectedIconId(index);
           }
 
+          let key = convertLat(location.lat)
+
           if(location.current)
             return(
-              <Collapse key={i} style={styles.collapseContainer} onToggle={(isExp) => {handleToggle(isExp, i); handleIcon(i)}} >
+              <Collapse key={key} style={styles.collapseContainer} onToggle={(isExp) => {handleToggle(isExp, key); handleIcon(key)}} >
                 <CollapseHeader style={styles.collapseHeader}>
                   <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text>Location</Text>
                     <Icon 
-                      type={`${selectedIconId === i && isExpanded ? 'Entypo' : 'MaterialIcons' }`}
-                      name={`${selectedIconId === i && isExpanded ? 'cross' : 'arrow-drop-down' }`}
-                      onPress={() => selectedIconId === i && isExpanded ? handleDeleteLocation(i): null }
+                      type={`${selectedIconId === key && isExpanded ? 'Entypo' : 'MaterialIcons' }`}
+                      name={`${selectedIconId === key && isExpanded ? 'cross' : 'arrow-drop-down' }`}
+                      onPress={() => selectedIconId === key && isExpanded ? handleDeleteLocation(key): null }
                     />
                   </View>
                 </CollapseHeader>

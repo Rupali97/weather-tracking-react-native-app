@@ -41,11 +41,15 @@ function Map(props) {
 //     //         console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson));
 // // })
 //   })
+  const convertLat = (num) =>{
+    let stringNum = num.toString();
+    let conversion = `${stringNum.slice(0,2)}${stringNum.slice(3, 7)}`
+    return conversion;
+  }
 
   useEffect(() => {
-    const markerArray = coordinates.filter((item, i) => i !== props.markerIndex);
-    setCoordinates(markerArray);
-    console.log('props.markerIndex', props.markerIndex);
+    const markerArray = weatherData.filter((item, i) => convertLat(item.lat) !== props.markerIndex);
+    setWeatherData(markerArray);
   }, [props.markerIndex])
 
   const toggleModal = async() => {
@@ -86,24 +90,32 @@ function Map(props) {
             setLoading(true);
           }}>
           {
-            coordinates.map((coord, i) => (
-              <Marker key={i} coordinate={coord} pinColor={`${markerStatus && markerIndex === i ? '#000' : 'red'}`}
+            weatherData.map((data, i) => {
+              let coord = {latitude: data.lat, longitude: data.lon}
+              return(
+                <Marker 
+                key={i} 
+                coordinate={coord} 
+                pinColor={`${markerStatus && markerIndex === convertLat(data.lat) ? '#000' : 'red'}`}
               />
-            ))
+              )
+            })
           }
         </MapView> 
         
         <ActivityIndicator size={100} color="#0000ff" animating={loading} style={styles.loadingSpinner} />
         
         <Modal isVisible={modalVisible} style={styles.modalContainer}>
+         <View style={{backgroundColor: '#fff', width: '70%', padding: 30}}>
           <View style={styles.modalTextView}>
-            <Text style={{textAlign: 'center'}}>Location</Text>
-          </View>
-          <View style={styles.modalBtnView}>
-            <Button title="Cancel" onPress={() => {setLoading(false); setModalVisible(false) } } />
-            <Text>{"  "}</Text>
-            <Button title="Save" onPress={toggleModal} />
-          </View>
+              <Text style={{textAlign: 'center'}}>Location</Text>
+            </View>
+            <View style={styles.modalBtnView}>
+              <Button title="Cancel" onPress={() => {setLoading(false); setModalVisible(false) } } />
+              <Text>{"  "}</Text>
+              <Button title="Save" onPress={toggleModal} />
+            </View>
+         </View>
         </Modal>
       
       </View>
