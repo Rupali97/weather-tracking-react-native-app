@@ -4,9 +4,7 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import Modal from 'react-native-modal';
 import Geocoder from 'react-native-geocoding';
 import {Header, Title, Body} from 'native-base'
-import axios from 'axios'
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
-
 
 function Map(props) {
   const [loading, setLoading] = useState(false);
@@ -58,14 +56,17 @@ function Map(props) {
     setModalVisible(!modalVisible);
     setCoordinates([...coordinates, currentCoords]);
 
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${currentCoords.latitude}&lon=${currentCoords.longitude}&exclude={part}&appid=${apiKey}`)
-    const res = await response.json();
-    setWeatherData([...weatherData, res], (currentData) => {
-      props.weatherData(currentData);
-      
-    });
+    try{
+      const response = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${currentCoords.latitude}&lon=${currentCoords.longitude}&exclude={part}&appid=${apiKey}`)
+      const res = await response.json();
+      setWeatherData([...weatherData, res], (currentData) => {
+        props.weatherData(currentData);
+        
+      });
+    }catch(err){
+      console.log('error', err);
+    }
     setLoading(false);
-    
   };
 
   const locationHandler = (coords) => {}
