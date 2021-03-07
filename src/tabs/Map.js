@@ -25,7 +25,7 @@ function Map(props) {
 
 //   useEffect(() => {
 
-//     Geocoder.init('AIzaSyA7vWDDkimcvyp1gkM757hfKEO-3v1SR_A');
+//     Geocoder.init('');
 //     Geocoder.from(41.89, 12.49)
 //     .then(json => {
 //     var addressComponent = json.results[0].address_components[0];
@@ -33,7 +33,7 @@ function Map(props) {
 //     })
 //     .catch(error => console.error(error));
 
-//     // fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + 41.89 + ',' + 12.49 + '&key=' + 'AIzaSyA7vWDDkimcvyp1gkM757hfKEO-3v1SR_A')
+//     // fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + 41.89 + ',' + 12.49 + '&key=' + '')
 //     //     .then((response) => response.json())
 //     //     .then((responseJson) => {
 //     //         console.log('ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson));
@@ -52,7 +52,7 @@ function Map(props) {
 
   const toggleModal = async() => {
 
-    const apiKey = "99e84e4a7e63c2d3bd757ff7db0315a4";
+    const apiKey = process.env.googleApiKey;
     setModalVisible(!modalVisible);
     setCoordinates([...coordinates, currentCoords]);
 
